@@ -7,10 +7,20 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     box-sizing: border-box;
+    /* background-color: #000; */
   }
   input {
     border: none;
     outline: none;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  td {
+    border: 1px solid black;
+    width: 40px;
+    height: 40px;
+    text-align: center;
   }
 `;
 
