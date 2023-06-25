@@ -1,26 +1,28 @@
 import styled from 'styled-components';
-import Cell from './Cell';
+import Tr from './Tr';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
-interface IBoardProps {
-  width: number;
-  height: number;
-  mine: number;
-}
+const Board = () => {
+  const tableData = useSelector((state: RootState) => state.board.tableData);
 
-const Board = ({ width, height, mine }: IBoardProps) => {
   return (
-    <BoardWrapper width={width}>
-      {Array.from({ length: width * height }).map((_, index) => (
-        <Cell key={index} />
-      ))}
+    <BoardWrapper>
+      <table>
+        {Array(tableData.length)
+          .fill(undefined)
+          .map(() => (
+            <Tr />
+          ))}
+        <Tr />
+      </table>
     </BoardWrapper>
   );
 };
 
 export default Board;
 
-const BoardWrapper = styled.div<{ width: number }>`
-  display: grid;
-  grid-template-columns: repeat(${({ width }) => width}, 30px);
+const BoardWrapper = styled.div`
+  display: flex;
   justify-content: center;
 `;

@@ -59,7 +59,6 @@ const plantMine = (width: number, height: number, mine: number) => {
     data[ver][hor] = CODE.MINE;
   });
 
-  console.log(data);
   return data;
 };
 
