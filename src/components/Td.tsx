@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import styled from 'styled-components';
-import { CODE, openMine, openTd } from '../store/boardSlice';
+import { CODE, openMine, openTd, plantFlag } from '../store/boardSlice';
 
 const tdBackgroundColors: { [key: number]: string } = {
   [CODE.MINE]: 'red',
@@ -49,11 +49,37 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
       case CODE.MINE:
         dispatch(openMine({ rowIndex, dataIndex }));
         return;
+      default:
+        return;
+    }
+  };
+
+  const handleRightClick = (event: any) => {
+    event.prevenDefault();
+    switch (tdState) {
+      case CODE.NORMAL:
+      case CODE.MINE:
+        dispatch(plantFlag({ rowIndex, dataIndex }));
+        return;
+      case CODE.FLAG:
+      case CODE.FLAG_MINE:
+        dispatch(plantQuestion({ rowIndex, dataIndex }));
+        return;
+      case CODE.QUESTION:
+      case CODE.QUESTION_MINE:
+        dispatch(changeNormal({ rowIndex, dataIndex }));
+        return;
+      default:
+        return;
     }
   };
 
   return (
-    <StyledTd tdBackgroundColor={tdBackgroundColor} onClick={handleOpenChange}>
+    <StyledTd
+      tdBackgroundColor={tdBackgroundColor}
+      onClick={handleOpenChange}
+      onContextMenu={handleRightClick}
+    >
       {renderTdContent()}
     </StyledTd>
   );
