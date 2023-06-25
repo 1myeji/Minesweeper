@@ -11,10 +11,9 @@ const Board = () => {
       <table>
         {Array(tableData.length)
           .fill(undefined)
-          .map(() => (
-            <Tr />
+          .map((tr, index) => (
+            <Tr rowIndex={index} />
           ))}
-        <Tr />
       </table>
     </BoardWrapper>
   );
