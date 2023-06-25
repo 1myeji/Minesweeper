@@ -86,9 +86,13 @@ const board = createSlice({
       state.data = action.payload;
       state.tableData = plantMine(state.data.width, state.data.height, state.data.mine);
     },
+    openTd: (state, action) => {
+      const { rowIndex, dataIndex } = action.payload;
+      state.tableData[rowIndex][dataIndex] = CODE.OPENED;
+    },
   },
 });
 
-export const { setDifficulty, setCustomDifficulty } = board.actions;
+export const { setDifficulty, setCustomDifficulty, openTd } = board.actions;
 
 export default board;

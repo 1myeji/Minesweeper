@@ -1,7 +1,7 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import styled from 'styled-components';
-import { CODE } from '../store/boardSlice';
+import { CODE, openTd } from '../store/boardSlice';
 
 interface ITdProps {
   rowIndex: number;
@@ -9,7 +9,7 @@ interface ITdProps {
 }
 
 const tdBackgroundColors: { [key: number]: string } = {
-  [CODE.MINE]: 'lightgrey',
+  [CODE.MINE]: 'red',
   [CODE.NORMAL]: 'lightgrey',
   [CODE.FLAG]: 'blue',
   [CODE.FLAG_MINE]: 'purple',
@@ -18,8 +18,10 @@ const tdBackgroundColors: { [key: number]: string } = {
 };
 
 const Td = ({ rowIndex, dataIndex }: ITdProps) => {
+  const dispatch = useDispatch();
   const tableData = useSelector((state: RootState) => state.board.tableData);
   const tdState = tableData[rowIndex][dataIndex];
+  const tdBackgroundColor = tdBackgroundColors[tdState];
 
   const renderTdContent = () => {
     if (tdState === CODE.FLAG || tdState === CODE.FLAG_MINE) {
@@ -32,9 +34,15 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
     return '';
   };
 
-  const tdBackgroundColor = tdBackgroundColors[tdState];
+  const handleOpenChange = () => {
+    dispatch(openTd({ rowIndex, dataIndex }));
+  };
 
-  return <StyledTd tdBackgroundColor={tdBackgroundColor}>{renderTdContent()}</StyledTd>;
+  return (
+    <StyledTd tdBackgroundColor={tdBackgroundColor} onClick={handleOpenChange}>
+      {renderTdContent()}
+    </StyledTd>
+  );
 };
 
 const StyledTd = styled.td<{ tdBackgroundColor: string }>`
