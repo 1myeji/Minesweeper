@@ -5,6 +5,8 @@ export const CODE = {
   NORMAL: -1, // 아무런 상태도 아닌 기본 칸
   FLAG: -3, // 깃발이 있는 상태
   FLAG_MINE: -5, // 지뢰가 있고 깃발이 있는 상태인 칸
+  QUESTION: -2,
+  QUESTION_MINE: -4,
   CLICKED_MINE: -6, // 클릭하여 지뢰가 터진 상태
   OPENED: 0, // 열려있는 칸, 0 이상의 값이면 다
 } as const;
@@ -90,9 +92,13 @@ const board = createSlice({
       const { rowIndex, dataIndex } = action.payload;
       state.tableData[rowIndex][dataIndex] = CODE.OPENED;
     },
+    openMine: (state, action) => {
+      const { rowIndex, dataIndex } = action.payload;
+      state.tableData[rowIndex][dataIndex] = CODE.CLICKED_MINE;
+    },
   },
 });
 
-export const { setDifficulty, setCustomDifficulty, openTd } = board.actions;
+export const { setDifficulty, setCustomDifficulty, openTd, openMine } = board.actions;
 
 export default board;

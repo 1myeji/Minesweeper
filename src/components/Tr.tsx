@@ -14,7 +14,7 @@ const Tr = ({ rowIndex }: ITrProps) => {
       {tableData[0] &&
         Array(tableData[0].length)
           .fill(undefined)
-          .map((td, index) => <Td rowIndex={rowIndex} dataIndex={index} />)}
+          .map((_, index) => <Td rowIndex={rowIndex} dataIndex={index} />)}
     </tr>
   );
 };
