@@ -103,9 +103,16 @@ const board = createSlice({
       if (cell === CODE.NORMAL) cell = CODE.FLAG;
       else if (cell === CODE.MINE) cell = CODE.FLAG_MINE;
     },
+    plantQuestion: (state, action) => {
+      const { rowIndex, dataIndex } = action.payload;
+      let cell = state.tableData[rowIndex][dataIndex];
+      if (cell === CODE.FLAG) cell = CODE.QUESTION;
+      else if (cell === CODE.FLAG_MINE) cell = CODE.QUESTION_MINE;
+    },
   },
 });
 
-export const { setDifficulty, setCustomDifficulty, openTd, openMine, plantFlag } = board.actions;
+export const { setDifficulty, setCustomDifficulty, openTd, openMine, plantFlag, plantQuestion } =
+  board.actions;
 
 export default board;

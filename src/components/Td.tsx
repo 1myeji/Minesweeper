@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import styled from 'styled-components';
-import { CODE, openMine, openTd, plantFlag } from '../store/boardSlice';
+import { CODE, openMine, openTd, plantFlag, plantQuestion } from '../store/boardSlice';
 
 const tdBackgroundColors: { [key: number]: string } = {
   [CODE.MINE]: 'red',
