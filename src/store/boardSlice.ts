@@ -99,21 +99,21 @@ const board = createSlice({
     },
     plantFlag: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
-      let cell = state.tableData[rowIndex][dataIndex];
-      if (cell === CODE.NORMAL) cell = CODE.FLAG;
-      else if (cell === CODE.MINE) cell = CODE.FLAG_MINE;
+      const cell = state.tableData[rowIndex][dataIndex];
+      if (cell === CODE.NORMAL) state.tableData[rowIndex][dataIndex] = CODE.FLAG;
+      else if (cell === CODE.MINE) state.tableData[rowIndex][dataIndex] = CODE.FLAG_MINE;
     },
     plantQuestion: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
-      let cell = state.tableData[rowIndex][dataIndex];
-      if (cell === CODE.FLAG) cell = CODE.QUESTION;
-      else if (cell === CODE.FLAG_MINE) cell = CODE.QUESTION_MINE;
+      const cell = state.tableData[rowIndex][dataIndex];
+      if (cell === CODE.FLAG) state.tableData[rowIndex][dataIndex] = CODE.QUESTION;
+      else if (cell === CODE.FLAG_MINE) state.tableData[rowIndex][dataIndex] = CODE.QUESTION_MINE;
     },
     changeNormal: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
-      let cell = state.tableData[rowIndex][dataIndex];
-      if (cell === CODE.QUESTION) cell = CODE.NORMAL;
-      else if (cell === CODE.QUESTION_MINE) cell = CODE.MINE;
+      const cell = state.tableData[rowIndex][dataIndex];
+      if (cell === CODE.QUESTION) state.tableData[rowIndex][dataIndex] = CODE.NORMAL;
+      else if (cell === CODE.QUESTION_MINE) state.tableData[rowIndex][dataIndex] = CODE.MINE;
     },
   },
 });
