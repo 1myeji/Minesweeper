@@ -9,11 +9,13 @@ const Board = () => {
   return (
     <BoardWrapper>
       <table>
-        {Array(tableData.length)
-          .fill(undefined)
-          .map((_, index) => (
-            <Tr rowIndex={index} />
-          ))}
+        <tbody>
+          {Array(tableData.length)
+            .fill(undefined)
+            .map((_, index) => (
+              <Tr key={index} rowIndex={index} />
+            ))}
+        </tbody>
       </table>
     </BoardWrapper>
   );
