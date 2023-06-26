@@ -1,12 +1,21 @@
 import { TD_TYPE } from '../store/boardSlice';
 
-// 지뢰를 무작위로 배치하는 함수
-export const plantMine = (width: number, height: number, mine: number) => {
+export const plantMine = (width: number, height: number, mine: number, exclude?: any) => {
   // 가능한 모든 칸 ex) [0, 1, ..., 99]
   const candidate = Array.from({ length: width * height }, (_, i) => i);
 
   // 지뢰 위치를 무작위로 선택, ex) [4, 7, 11, ...]
   const shuffle = [];
+
+  // exclude가 주어진 경우, 해당 위치를 제거
+  if (exclude) {
+    const excludeIndex = exclude.rowIndex * height + exclude.dataIndex;
+    const excludePos = candidate.indexOf(excludeIndex);
+    if (excludePos !== -1) {
+      candidate.splice(excludePos, 1);
+    }
+  }
+
   while (shuffle.length < mine) {
     const randomIndex = Math.floor(Math.random() * candidate.length);
     const chosen = candidate.splice(randomIndex, 1)[0];

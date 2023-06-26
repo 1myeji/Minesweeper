@@ -1,14 +1,17 @@
 import styled from 'styled-components';
 import Controls from './components/Controls';
 import Board from './components/Board';
-import { useDispatch } from 'react-redux';
-import { setDifficulty } from './store/boardSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetGame, setDifficulty } from './store/boardSlice';
 import { useEffect } from 'react';
+import { RootState } from './store/store';
 
 const App = () => {
   const dispatch = useDispatch();
+  const { status } = useSelector((state: RootState) => state.board);
 
   const handleDifficultyChange = (difficulty: string) => {
+    dispatch(resetGame());
     dispatch(setDifficulty(difficulty));
   };
 
@@ -20,6 +23,7 @@ const App = () => {
     <AppWrapper>
       <Controls handleDifficultyChange={handleDifficultyChange} />
       <Board />
+      <div>{status}</div>
     </AppWrapper>
   );
 };

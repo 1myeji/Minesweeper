@@ -28,7 +28,7 @@ interface ITdProps {
 
 const Td = ({ rowIndex, dataIndex }: ITdProps) => {
   const dispatch = useDispatch();
-  const { tableData, halted } = useSelector((state: RootState) => state.board);
+  const { tableData, status } = useSelector((state: RootState) => state.board);
   const tdState = tableData[rowIndex][dataIndex];
   const tdBackgroundColor = tdBackgroundColors[tdState];
 
@@ -43,6 +43,7 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
   };
 
   const handleOpenChange = () => {
+    if (status === 'LOSE') return;
     switch (tdState) {
       case TD_TYPE.OPENED:
       case TD_TYPE.FLAG:
