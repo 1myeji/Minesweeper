@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import Controls from './components/Controls';
 import Board from './components/Board';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetGame, setDifficulty } from './store/boardSlice';
+import { increaseTime, resetGame, setDifficulty } from './store/boardSlice';
 import { useEffect } from 'react';
 import { RootState } from './store/store';
 
 const App = () => {
   const dispatch = useDispatch();
-  const { status } = useSelector((state: RootState) => state.board);
+  const { status, timer } = useSelector((state: RootState) => state.board);
 
   const handleDifficultyChange = (difficulty: string) => {
     dispatch(resetGame());
@@ -19,11 +19,26 @@ const App = () => {
     dispatch(setDifficulty('Beginner'));
   }, []);
 
+  useEffect(() => {
+    let timer = 0;
+    if (status === 'PLAYING') {
+      timer = setInterval(() => {
+        dispatch(increaseTime());
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, [status]);
+
   return (
     <AppWrapper>
       <Controls handleDifficultyChange={handleDifficultyChange} />
       <Board />
-      <Status>{status}</Status>
+      <Status>
+        <p>{status}</p>
+        <Timer>Timer: {timer}</Timer>
+      </Status>
     </AppWrapper>
   );
 };
@@ -35,8 +50,14 @@ const AppWrapper = styled.main`
 `;
 
 const Status = styled.div`
-  width: 50px;
-  margin: 20px auto 20px;
+  justify-content: center;
+  margin: 20px 0 20px;
   font-size: 20px;
   font-weight: 900;
+  display: flex;
+  gap: 20px;
+`;
+
+const Timer = styled.p`
+  color: red;
 `;

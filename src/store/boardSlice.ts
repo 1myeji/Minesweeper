@@ -20,7 +20,6 @@ interface BoardState {
     mine: number;
   };
   timer: number;
-  result: string;
   status: 'READY' | 'PLAYING' | 'WIN' | 'LOSE';
   openedCount: number;
 }
@@ -33,7 +32,6 @@ const initialState: BoardState = {
     mine: 10,
   },
   timer: 0,
-  result: '',
   status: 'READY',
   openedCount: 0,
 };
@@ -160,6 +158,9 @@ const board = createSlice({
     resetGame: () => {
       return { ...initialState };
     },
+    increaseTime: state => {
+      state.timer += 1;
+    },
   },
 });
 
@@ -171,6 +172,7 @@ export const {
   plantQuestion,
   changeNormal,
   resetGame,
+  increaseTime,
 } = board.actions;
 
 export default board;

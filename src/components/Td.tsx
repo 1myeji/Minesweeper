@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { TD_TYPE, changeNormal, openTd, plantFlag, plantQuestion } from '../store/boardSlice';
 
 const tdBackgroundColors: { [key: number]: string } = {
-  [TD_TYPE.MINE]: 'red',
+  [TD_TYPE.MINE]: 'lightgrey',
   [TD_TYPE.NORMAL]: 'lightgrey',
   [TD_TYPE.FLAG]: 'lightgrey',
   [TD_TYPE.FLAG_MINE]: 'lightgrey',
