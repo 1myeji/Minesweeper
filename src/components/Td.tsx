@@ -90,7 +90,7 @@ const StyledTd = styled.td<{ tdBackgroundColor: string }>`
   width: 30px;
   height: 30px;
   text-align: center;
-  border: 1px solid black;
+  border: 3px solid black;
   background-color: ${({ tdBackgroundColor }) => tdBackgroundColor};
 `;
 

@@ -61,6 +61,8 @@ const Button = styled.button`
   margin: 0 10px;
   padding: 10px 20px;
   cursor: pointer;
+  border-color: beige;
+  border-radius: 10px;
 `;
 
 const CustomInput = styled.input`

@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     box-sizing: border-box;
-    /* background-color: #000; */
+    background-color: beige;
   }
   input {
     border: none;
