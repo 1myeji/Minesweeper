@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const CODE = {
-  MINE: -7, // 지뢰가 있는 칸
+export const TD_TYPE = {
   NORMAL: -1, // 아무런 상태도 아닌 기본 칸
-  FLAG: -3, // 깃발이 있는 상태
-  FLAG_MINE: -5, // 지뢰가 있고 깃발이 있는 상태인 칸
-  QUESTION: -2,
-  QUESTION_MINE: -4,
-  CLICKED_MINE: -6, // 클릭하여 지뢰가 터진 상태
+  FLAG: -2, // 깃발이 있는 상태
+  FLAG_MINE: -3, // 지뢰가 있고 깃발이 있는 상태인 칸
+  QUESTION: -4,
+  QUESTION_MINE: -5,
+  MINE: -6, // 지뢰가 있는 칸
+  CLICKED_MINE: -7, // 클릭하여 지뢰가 터진 상태
   OPENED: 0, // 열려있는 칸, 0 이상의 값이면 다
-} as const;
+};
 
 interface BoardState {
-  tableData: number[][]; // 2차원배열, 각 칸의 CODE 나타냄
+  tableData: number[][]; // 2차원배열, 각 칸의 TD_TYPE 나타냄
   data: {
     // 보드의 크기, 지뢰의 개수
     width: number;
@@ -52,13 +52,13 @@ const plantMine = (width: number, height: number, mine: number) => {
   }
 
   // 빈 보드 생성  [ [-1, -1, -1], [-1, -1, -1], [-1, -1, -1] ]
-  const data = Array.from({ length: width }, () => Array(height).fill(CODE.NORMAL));
+  const data = Array.from({ length: width }, () => Array(height).fill(TD_TYPE.NORMAL));
 
   // 지뢰 심기
   shuffle.forEach(chosen => {
     const ver = Math.floor(chosen / height);
     const hor = chosen % height;
-    data[ver][hor] = CODE.MINE;
+    data[ver][hor] = TD_TYPE.MINE;
   });
 
   return data;
@@ -90,30 +90,65 @@ const board = createSlice({
     },
     openTd: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
-      state.tableData[rowIndex][dataIndex] = CODE.OPENED;
+      // 이웃한 Td의 TD_TYPE을 담을 배열
+      let neighborTd: number[] = [];
+      let mineCount = 0;
+      // 윗줄
+      neighborTd = state.tableData[rowIndex - 1]
+        ? neighborTd.concat(
+            state.tableData[rowIndex - 1][dataIndex - 1],
+            state.tableData[rowIndex - 1][dataIndex],
+            state.tableData[rowIndex - 1][dataIndex + 1],
+          )
+        : neighborTd;
+
+      // 아랫줄
+      neighborTd = state.tableData[rowIndex + 1]
+        ? neighborTd.concat(
+            state.tableData[rowIndex + 1][dataIndex - 1],
+            state.tableData[rowIndex + 1][dataIndex],
+            state.tableData[rowIndex + 1][dataIndex + 1],
+          )
+        : neighborTd;
+
+      // 양 옆
+      neighborTd = neighborTd.concat(
+        state.tableData[rowIndex][dataIndex - 1],
+        state.tableData[rowIndex][dataIndex + 1],
+      );
+
+      console.log(neighborTd);
+
+      // neightborTd 배열 중 지뢰의 개수
+      mineCount = neighborTd.filter((data: number) =>
+        [TD_TYPE.MINE, TD_TYPE.FLAG_MINE, TD_TYPE.QUESTION_MINE].includes(data),
+      ).length;
+
+      state.tableData[rowIndex][dataIndex] = mineCount;
     },
     openMine: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
-      state.tableData[rowIndex][dataIndex] = CODE.CLICKED_MINE;
+      state.tableData[rowIndex][dataIndex] = TD_TYPE.CLICKED_MINE;
       state.halted = true;
     },
     plantFlag: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
       const cell = state.tableData[rowIndex][dataIndex];
-      if (cell === CODE.NORMAL) state.tableData[rowIndex][dataIndex] = CODE.FLAG;
-      else if (cell === CODE.MINE) state.tableData[rowIndex][dataIndex] = CODE.FLAG_MINE;
+      if (cell === TD_TYPE.NORMAL) state.tableData[rowIndex][dataIndex] = TD_TYPE.FLAG;
+      else if (cell === TD_TYPE.MINE) state.tableData[rowIndex][dataIndex] = TD_TYPE.FLAG_MINE;
     },
     plantQuestion: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
       const cell = state.tableData[rowIndex][dataIndex];
-      if (cell === CODE.FLAG) state.tableData[rowIndex][dataIndex] = CODE.QUESTION;
-      else if (cell === CODE.FLAG_MINE) state.tableData[rowIndex][dataIndex] = CODE.QUESTION_MINE;
+      if (cell === TD_TYPE.FLAG) state.tableData[rowIndex][dataIndex] = TD_TYPE.QUESTION;
+      else if (cell === TD_TYPE.FLAG_MINE)
+        state.tableData[rowIndex][dataIndex] = TD_TYPE.QUESTION_MINE;
     },
     changeNormal: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
       const cell = state.tableData[rowIndex][dataIndex];
-      if (cell === CODE.QUESTION) state.tableData[rowIndex][dataIndex] = CODE.NORMAL;
-      else if (cell === CODE.QUESTION_MINE) state.tableData[rowIndex][dataIndex] = CODE.MINE;
+      if (cell === TD_TYPE.QUESTION) state.tableData[rowIndex][dataIndex] = TD_TYPE.NORMAL;
+      else if (cell === TD_TYPE.QUESTION_MINE) state.tableData[rowIndex][dataIndex] = TD_TYPE.MINE;
     },
   },
 });

@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import styled from 'styled-components';
 import {
-  CODE,
+  TD_TYPE,
   changeNormal,
   openMine,
   openTd,
@@ -11,14 +11,14 @@ import {
 } from '../store/boardSlice';
 
 const tdBackgroundColors: { [key: number]: string } = {
-  [CODE.MINE]: 'red',
-  [CODE.NORMAL]: 'lightgrey',
-  [CODE.FLAG]: 'lightgrey',
-  [CODE.FLAG_MINE]: 'lightgrey',
-  [CODE.QUESTION]: 'lightgrey',
-  [CODE.QUESTION_MINE]: 'lightgrey',
-  [CODE.CLICKED_MINE]: 'red',
-  [CODE.OPENED]: 'white',
+  [TD_TYPE.MINE]: 'red',
+  [TD_TYPE.NORMAL]: 'lightgrey',
+  [TD_TYPE.FLAG]: 'lightgrey',
+  [TD_TYPE.FLAG_MINE]: 'lightgrey',
+  [TD_TYPE.QUESTION]: 'lightgrey',
+  [TD_TYPE.QUESTION_MINE]: 'lightgrey',
+  [TD_TYPE.CLICKED_MINE]: 'red',
+  [TD_TYPE.OPENED]: 'white',
 };
 
 interface ITdProps {
@@ -33,27 +33,27 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
   const tdBackgroundColor = tdBackgroundColors[tdState];
 
   const renderTdContent = () => {
-    if (tdState === CODE.NORMAL) return '';
-    if (tdState === CODE.MINE) return '';
-    if (tdState === CODE.CLICKED_MINE) return '💣';
-    if (tdState === CODE.FLAG || tdState === CODE.FLAG_MINE) return '🚩';
-    if (tdState === CODE.QUESTION || tdState === CODE.QUESTION_MINE) return '❓';
-    if (tdState >= CODE.OPENED) return tdState; // 숫자 표시 (0이상)
+    if (tdState === TD_TYPE.NORMAL) return '';
+    if (tdState === TD_TYPE.MINE) return '';
+    if (tdState === TD_TYPE.CLICKED_MINE) return '💣';
+    if (tdState === TD_TYPE.FLAG || tdState === TD_TYPE.FLAG_MINE) return '🚩';
+    if (tdState === TD_TYPE.QUESTION || tdState === TD_TYPE.QUESTION_MINE) return '❓';
+    if (tdState >= TD_TYPE.OPENED) return tdState; // 숫자 표시 (0이상)
     return '';
   };
 
   const handleOpenChange = () => {
     switch (tdState) {
-      case CODE.OPENED:
-      case CODE.FLAG:
-      case CODE.FLAG_MINE:
-      case CODE.QUESTION:
-      case CODE.QUESTION_MINE:
+      case TD_TYPE.OPENED:
+      case TD_TYPE.FLAG:
+      case TD_TYPE.FLAG_MINE:
+      case TD_TYPE.QUESTION:
+      case TD_TYPE.QUESTION_MINE:
         return;
-      case CODE.NORMAL:
+      case TD_TYPE.NORMAL:
         dispatch(openTd({ rowIndex, dataIndex }));
         return;
-      case CODE.MINE:
+      case TD_TYPE.MINE:
         dispatch(openMine({ rowIndex, dataIndex }));
         return;
       default:
@@ -64,16 +64,16 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
   const handleRightClick = (event: React.MouseEvent) => {
     event.preventDefault();
     switch (tdState) {
-      case CODE.NORMAL:
-      case CODE.MINE:
+      case TD_TYPE.NORMAL:
+      case TD_TYPE.MINE:
         dispatch(plantFlag({ rowIndex, dataIndex }));
         return;
-      case CODE.FLAG:
-      case CODE.FLAG_MINE:
+      case TD_TYPE.FLAG:
+      case TD_TYPE.FLAG_MINE:
         dispatch(plantQuestion({ rowIndex, dataIndex }));
         return;
-      case CODE.QUESTION:
-      case CODE.QUESTION_MINE:
+      case TD_TYPE.QUESTION:
+      case TD_TYPE.QUESTION_MINE:
         dispatch(changeNormal({ rowIndex, dataIndex }));
         return;
       default:
