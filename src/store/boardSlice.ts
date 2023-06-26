@@ -125,14 +125,15 @@ const board = createSlice({
           });
           checkNeighbor(state.tableData, rowIndex, dataIndex);
           state.status = 'PLAYING';
+        } else {
+          state.tableData[rowIndex][dataIndex] = TD_TYPE.CLICKED_MINE;
+          state.status = 'LOSE';
         }
       } else {
-        state.tableData[rowIndex][dataIndex] = TD_TYPE.CLICKED_MINE;
-        state.status = 'LOSE';
+        checkNeighbor(state.tableData, rowIndex, dataIndex);
+        state.status = 'PLAYING';
       }
 
-      checkNeighbor(state.tableData, rowIndex, dataIndex);
-      state.status = 'PLAYING';
       if (state.data.width * state.data.height - state.data.mine === state.openedCount) {
         state.status = 'WIN';
       }

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { setCustomDifficulty } from '../store/boardSlice';
+import { resetGame, setCustomDifficulty } from '../store/boardSlice';
 import { useState } from 'react';
 
 interface IControlsProps {
@@ -35,11 +35,12 @@ const Controls = ({ handleDifficultyChange }: IControlsProps) => {
           onChange={e => setCustomBombs(Number(e.target.value))}
         />
         <Button
-          onClick={() =>
+          onClick={() => {
+            dispatch(resetGame());
             dispatch(
               setCustomDifficulty({ width: customWidth, height: customHeight, mine: customBombs }),
-            )
-          }
+            );
+          }}
         >
           Custom Game Setup
         </Button>
