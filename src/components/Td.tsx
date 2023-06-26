@@ -38,7 +38,7 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
     if (tdState === TD_TYPE.CLICKED_MINE) return '💣';
     if (tdState === TD_TYPE.FLAG || tdState === TD_TYPE.FLAG_MINE) return '🚩';
     if (tdState === TD_TYPE.QUESTION || tdState === TD_TYPE.QUESTION_MINE) return '❓';
-    if (tdState >= TD_TYPE.OPENED) return tdState; // 숫자 표시 (0이상)
+    if (tdState > TD_TYPE.OPENED) return tdState; // 숫자 표시 (0이상)
     return '';
   };
 

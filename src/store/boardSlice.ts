@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { checkNeighbor } from '../utils/checkNeighbor';
+import { plantMine } from '../utils/plantMine';
 
 export const TD_TYPE = {
   NORMAL: -1, // 아무런 상태도 아닌 기본 칸
@@ -38,32 +40,6 @@ const initialState: BoardState = {
   openedCount: 0,
 };
 
-// 지뢰를 무작위로 배치하는 함수
-const plantMine = (width: number, height: number, mine: number) => {
-  // 가능한 모든 칸 ex) [0, 1, ..., 99]
-  const candidate = Array.from({ length: width * height }, (_, i) => i);
-
-  // 지뢰 위치를 무작위로 선택, ex) [4, 7, 11, ...]
-  const shuffle = [];
-  while (shuffle.length < mine) {
-    const randomIndex = Math.floor(Math.random() * candidate.length);
-    const chosen = candidate.splice(randomIndex, 1)[0];
-    shuffle.push(chosen);
-  }
-
-  // 빈 보드 생성  [ [-1, -1, -1], [-1, -1, -1], [-1, -1, -1] ]
-  const data = Array.from({ length: width }, () => Array(height).fill(TD_TYPE.NORMAL));
-
-  // 지뢰 심기
-  shuffle.forEach(chosen => {
-    const ver = Math.floor(chosen / height);
-    const hor = chosen % height;
-    data[ver][hor] = TD_TYPE.MINE;
-  });
-
-  return data;
-};
-
 const board = createSlice({
   name: 'board',
   initialState,
@@ -90,41 +66,7 @@ const board = createSlice({
     },
     openTd: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
-      // 이웃한 Td의 TD_TYPE을 담을 배열
-      let neighborTd: number[] = [];
-      let mineCount = 0;
-      // 윗줄
-      neighborTd = state.tableData[rowIndex - 1]
-        ? neighborTd.concat(
-            state.tableData[rowIndex - 1][dataIndex - 1],
-            state.tableData[rowIndex - 1][dataIndex],
-            state.tableData[rowIndex - 1][dataIndex + 1],
-          )
-        : neighborTd;
-
-      // 아랫줄
-      neighborTd = state.tableData[rowIndex + 1]
-        ? neighborTd.concat(
-            state.tableData[rowIndex + 1][dataIndex - 1],
-            state.tableData[rowIndex + 1][dataIndex],
-            state.tableData[rowIndex + 1][dataIndex + 1],
-          )
-        : neighborTd;
-
-      // 양 옆
-      neighborTd = neighborTd.concat(
-        state.tableData[rowIndex][dataIndex - 1],
-        state.tableData[rowIndex][dataIndex + 1],
-      );
-
-      console.log(neighborTd);
-
-      // neightborTd 배열 중 지뢰의 개수
-      mineCount = neighborTd.filter((data: number) =>
-        [TD_TYPE.MINE, TD_TYPE.FLAG_MINE, TD_TYPE.QUESTION_MINE].includes(data),
-      ).length;
-
-      state.tableData[rowIndex][dataIndex] = mineCount;
+      checkNeighbor(state.tableData, rowIndex, dataIndex);
     },
     openMine: (state, action) => {
       const { rowIndex, dataIndex } = action.payload;
