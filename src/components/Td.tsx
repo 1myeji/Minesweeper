@@ -13,10 +13,10 @@ import {
 const tdBackgroundColors: { [key: number]: string } = {
   [CODE.MINE]: 'red',
   [CODE.NORMAL]: 'lightgrey',
-  [CODE.FLAG]: 'blue',
-  [CODE.FLAG_MINE]: 'purple',
-  [CODE.QUESTION]: 'purple',
-  [CODE.QUESTION_MINE]: 'blue',
+  [CODE.FLAG]: 'lightgrey',
+  [CODE.FLAG_MINE]: 'lightgrey',
+  [CODE.QUESTION]: 'lightgrey',
+  [CODE.QUESTION_MINE]: 'lightgrey',
   [CODE.CLICKED_MINE]: 'red',
   [CODE.OPENED]: 'white',
 };
@@ -28,7 +28,7 @@ interface ITdProps {
 
 const Td = ({ rowIndex, dataIndex }: ITdProps) => {
   const dispatch = useDispatch();
-  const tableData = useSelector((state: RootState) => state.board.tableData);
+  const { tableData, halted } = useSelector((state: RootState) => state.board);
   const tdState = tableData[rowIndex][dataIndex];
   const tdBackgroundColor = tdBackgroundColors[tdState];
 
@@ -61,8 +61,8 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
     }
   };
 
-  const handleRightClick = (event: any) => {
-    event.prevenDefault();
+  const handleRightClick = (event: React.MouseEvent) => {
+    event.preventDefault();
     switch (tdState) {
       case CODE.NORMAL:
       case CODE.MINE:
