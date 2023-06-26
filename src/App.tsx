@@ -23,7 +23,7 @@ const App = () => {
     <AppWrapper>
       <Controls handleDifficultyChange={handleDifficultyChange} />
       <Board />
-      <div>{status}</div>
+      <Status>{status}</Status>
     </AppWrapper>
   );
 };
@@ -32,4 +32,11 @@ export default App;
 
 const AppWrapper = styled.main`
   margin-top: 50px;
+`;
+
+const Status = styled.div`
+  width: 50px;
+  margin: 20px auto 20px;
+  font-size: 20px;
+  font-weight: 900;
 `;
