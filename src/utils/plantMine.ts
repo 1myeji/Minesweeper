@@ -1,10 +1,20 @@
 import { TD_TYPE } from '../store/boardSlice';
 
-export const plantMine = (width: number, height: number, mine: number, exclude?: any) => {
-  // 가능한 모든 칸 ex) [0, 1, ..., 99]
+interface ExcludePosition {
+  rowIndex: number;
+  dataIndex: number;
+}
+
+export const plantMine = (
+  width: number,
+  height: number,
+  mine: number,
+  exclude?: ExcludePosition,
+) => {
+  // 가능한 모든 칸
   const candidate = Array.from({ length: width * height }, (_, i) => i);
 
-  // 지뢰 위치를 무작위로 선택, ex) [4, 7, 11, ...]
+  // 지뢰 위치를 무작위로 선택
   const shuffle = [];
 
   // exclude가 주어진 경우, 해당 위치를 제거
@@ -22,7 +32,7 @@ export const plantMine = (width: number, height: number, mine: number, exclude?:
     shuffle.push(chosen);
   }
 
-  // 빈 보드 생성  [ [-1, -1, -1], [-1, -1, -1], [-1, -1, -1] ]
+  // 빈 보드 생성
   const data = Array.from({ length: width }, () => Array(height).fill(TD_TYPE.NORMAL));
 
   // 지뢰 심기

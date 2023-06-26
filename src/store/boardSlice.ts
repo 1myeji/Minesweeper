@@ -119,7 +119,8 @@ const board = createSlice({
         // 첫 번째 클릭인 경우
         if (state.openedCount === 0) {
           state.tableData = plantMine(state.data.width, state.data.height, state.data.mine, {
-            exclude: { rowIndex, dataIndex },
+            rowIndex,
+            dataIndex,
           });
           checkNeighbor(state.tableData, rowIndex, dataIndex);
           state.status = 'PLAYING';
