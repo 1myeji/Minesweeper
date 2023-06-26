@@ -66,17 +66,10 @@ const board = createSlice({
       const { rowIndex, dataIndex } = action.payload;
       const checkNeighbor = (tableData: number[][], rowIndex: number, dataIndex: number) => {
         const [rowLen, colLen] = [tableData.length, tableData[0].length];
-
         // 현재 칸의 인덱스가 게임판 범위 안에 있는지 확인
-        if (rowIndex < 0 || rowIndex >= rowLen || dataIndex < 0 || dataIndex >= colLen) {
-          return;
-        }
-
+        if (rowIndex < 0 || rowIndex >= rowLen || dataIndex < 0 || dataIndex >= colLen) return;
         // 현재 칸이 이미 열려 있을 때는 이 함수를 더 이상 진행하지 않습니다.
-        if (tableData[rowIndex][dataIndex] >= TD_TYPE.OPENED) {
-          return;
-        }
-
+        if (tableData[rowIndex][dataIndex] >= TD_TYPE.OPENED) return;
         // 현재 칸이 이미 열려 있거나, 깃발, 물음표 등의 상태인 경우
         if (
           [
@@ -89,7 +82,6 @@ const board = createSlice({
         ) {
           return;
         }
-
         // 현재 칸 주변의 8개 칸(상하좌우 대각선 포함)을 탐색하기 위한 좌표
         const neighbors = [
           [-1, -1],
@@ -101,7 +93,6 @@ const board = createSlice({
           [1, 0],
           [1, 1],
         ];
-
         // 주변 지뢰 갯수 계산
         let mineCount = 0;
         neighbors.forEach(([dx, dy]) => {
@@ -116,11 +107,8 @@ const board = createSlice({
             }
           }
         });
-
         tableData[rowIndex][dataIndex] = mineCount;
         state.openedCount++;
-        console.log(state.openedCount);
-
         // 만약 현재 칸 주변에 지뢰가 없으면, 주변 칸들을 재귀적으로 검사
         if (mineCount === 0) {
           neighbors.forEach(([dx, dy]) => {
@@ -129,26 +117,24 @@ const board = createSlice({
           });
         }
       };
+      if (state.tableData[rowIndex][dataIndex] === TD_TYPE.MINE) {
+        // 첫 번째 클릭인 경우
+        if (state.openedCount === 0) {
+          state.tableData = plantMine(state.data.width, state.data.height, state.data.mine, {
+            exclude: { rowIndex, dataIndex },
+          });
+          checkNeighbor(state.tableData, rowIndex, dataIndex);
+          state.status = 'PLAYING';
+        }
+      } else {
+        state.tableData[rowIndex][dataIndex] = TD_TYPE.CLICKED_MINE;
+        state.status = 'LOSE';
+      }
+
       checkNeighbor(state.tableData, rowIndex, dataIndex);
       state.status = 'PLAYING';
       if (state.data.width * state.data.height - state.data.mine === state.openedCount) {
         state.status = 'WIN';
-      }
-    },
-    openMine: (state, action) => {
-      const { rowIndex, dataIndex } = action.payload;
-      // 첫 번째 클릭인 경우
-      if (state.openedCount === 0) {
-        // 만약 지뢰가 있는 칸을 클릭했다면 지뢰를 다른 곳으로 재배치합니다.
-        state.tableData = plantMine(state.data.width, state.data.height, state.data.mine, {
-          exclude: { rowIndex, dataIndex },
-        });
-        // checkNeighbor(state.tableData, rowIndex, dataIndex);
-        state.openedCount++;
-        state.status = 'PLAYING';
-      } else {
-        state.tableData[rowIndex][dataIndex] = TD_TYPE.CLICKED_MINE;
-        state.status = 'LOSE';
       }
     },
     plantFlag: (state, action) => {
@@ -180,7 +166,6 @@ export const {
   setDifficulty,
   setCustomDifficulty,
   openTd,
-  openMine,
   plantFlag,
   plantQuestion,
   changeNormal,

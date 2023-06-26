@@ -1,14 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import styled from 'styled-components';
-import {
-  TD_TYPE,
-  changeNormal,
-  openMine,
-  openTd,
-  plantFlag,
-  plantQuestion,
-} from '../store/boardSlice';
+import { TD_TYPE, changeNormal, openTd, plantFlag, plantQuestion } from '../store/boardSlice';
 
 const tdBackgroundColors: { [key: number]: string } = {
   [TD_TYPE.MINE]: 'red',
@@ -38,7 +31,7 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
     if (tdState === TD_TYPE.CLICKED_MINE) return '💣';
     if (tdState === TD_TYPE.FLAG || tdState === TD_TYPE.FLAG_MINE) return '🚩';
     if (tdState === TD_TYPE.QUESTION || tdState === TD_TYPE.QUESTION_MINE) return '❓';
-    if (tdState > TD_TYPE.OPENED) return tdState; // 숫자 표시 (0이상)
+    if (tdState > TD_TYPE.OPENED) return tdState;
     return '';
   };
 
@@ -55,7 +48,7 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
         dispatch(openTd({ rowIndex, dataIndex }));
         return;
       case TD_TYPE.MINE:
-        dispatch(openMine({ rowIndex, dataIndex }));
+        dispatch(openTd({ rowIndex, dataIndex }));
         return;
       default:
         return;
