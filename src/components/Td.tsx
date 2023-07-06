@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { TD_TYPE, changeNormal, openTd, plantFlag, plantQuestion } from '../store/boardSlice';
 
 const tdBackgroundColors: { [key: number]: string } = {
-  [TD_TYPE.MINE]: 'lightgrey',
   [TD_TYPE.NORMAL]: 'lightgrey',
   [TD_TYPE.FLAG]: 'lightgrey',
   [TD_TYPE.FLAG_MINE]: 'lightgrey',
   [TD_TYPE.QUESTION]: 'lightgrey',
   [TD_TYPE.QUESTION_MINE]: 'lightgrey',
+  [TD_TYPE.MINE]: 'lightgrey',
   [TD_TYPE.CLICKED_MINE]: 'red',
   [TD_TYPE.OPENED]: 'white',
 };
@@ -21,8 +21,8 @@ interface ITdProps {
 
 const Td = ({ rowIndex, dataIndex }: ITdProps) => {
   const dispatch = useDispatch();
-  const { tableData, status } = useSelector((state: RootState) => state.board);
-  const tdState = tableData[rowIndex][dataIndex];
+  const tdState = useSelector((state: RootState) => state.board.tableData[rowIndex][dataIndex]);
+  const status = useSelector((state: RootState) => state.board.status);
   const tdBackgroundColor = tdBackgroundColors[tdState];
 
   const renderTdContent = () => {
@@ -35,7 +35,7 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
     return '';
   };
 
-  const handleOpenChange = () => {
+  const handleTdClick = () => {
     if (status === 'LOSE') return;
     switch (tdState) {
       case TD_TYPE.OPENED:
@@ -78,7 +78,7 @@ const Td = ({ rowIndex, dataIndex }: ITdProps) => {
   return (
     <StyledTd
       tdBackgroundColor={tdBackgroundColor}
-      onClick={handleOpenChange}
+      onClick={handleTdClick}
       onContextMenu={handleRightClick}
     >
       {renderTdContent()}

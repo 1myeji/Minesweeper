@@ -80,7 +80,7 @@ const board = createSlice({
         ) {
           return;
         }
-        // 현재 칸 주변의 8개 칸(상하좌우 대각선 포함)을 탐색하기 위한 좌표
+        // 현재 칸 주변의 8개 칸을 탐색하기 위한 좌표
         const neighbors = [
           [-1, -1],
           [-1, 0],
@@ -132,7 +132,7 @@ const board = createSlice({
         checkNeighbor(state.tableData, rowIndex, dataIndex);
         state.status = 'PLAYING';
       }
-
+      // 모든 안전한 칸이 열렸다면
       if (state.data.width * state.data.height - state.data.mine === state.openedCount) {
         state.status = 'WIN';
       }
