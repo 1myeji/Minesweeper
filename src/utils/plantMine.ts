@@ -19,11 +19,8 @@ export const plantMine = (
 
   // exclude가 주어진 경우, 해당 위치를 제거
   if (exclude) {
-    const excludeIndex = exclude.rowIndex * height + exclude.dataIndex;
-    const excludePos = candidate.indexOf(excludeIndex);
-    if (excludePos !== -1) {
-      candidate.splice(excludePos, 1);
-    }
+    const excludeIndex = exclude.rowIndex * width + exclude.dataIndex;
+    candidate.splice(excludeIndex, 1);
   }
 
   while (shuffle.length < mine) {
@@ -33,13 +30,13 @@ export const plantMine = (
   }
 
   // 빈 보드 생성
-  const data = Array.from({ length: width }, () => Array(height).fill(TD_TYPE.NORMAL));
+  const data = Array.from({ length: height }, () => Array(width).fill(TD_TYPE.NORMAL));
 
   // 지뢰 심기
   shuffle.forEach(chosen => {
-    const ver = Math.floor(chosen / height);
-    const hor = chosen % height;
-    data[ver][hor] = TD_TYPE.MINE;
+    const row = Math.floor(chosen / width);
+    const col = chosen % width;
+    data[row][col] = TD_TYPE.MINE;
   });
 
   return data;
